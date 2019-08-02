@@ -3,6 +3,7 @@ package com.mgo.search.reposiory;
 import com.mgo.search.reposiory.reader.JsonReader;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.core.io.ClassPathResource;
 
 import java.io.IOException;
 import java.util.Set;
@@ -21,7 +22,7 @@ class OrganizationJsonRepositoryTest {
 
     @BeforeEach
     void setUp() throws IOException {
-        orgRepo = new OrganizationJsonRepository("orgMockData.json", new JsonReader());
+        orgRepo = new OrganizationJsonRepository(new ClassPathResource("orgMockData.json").getFile(), new JsonReader());
     }
 
     @Test

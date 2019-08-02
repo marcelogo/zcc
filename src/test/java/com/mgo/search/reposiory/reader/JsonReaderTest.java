@@ -4,6 +4,7 @@ import com.mgo.search.reposiory.entity.Entity;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.junit.jupiter.api.Test;
+import org.springframework.core.io.ClassPathResource;
 
 import java.io.IOException;
 import java.util.Map;
@@ -13,7 +14,7 @@ import static org.hamcrest.collection.IsMapWithSize.aMapWithSize;
 
 class JsonReaderTest {
 
-    private static final String MOCK_DATA_JSON = "jsonReaderMockData.json";
+    private final ClassPathResource resourceData = new ClassPathResource("jsonReaderMockData.json");
     private static final String ENTITY1_ID = "1";
     private static final String ENTITY1_NAME = "one";
     private static final String ENTITY2_ID = "2";
@@ -23,14 +24,14 @@ class JsonReaderTest {
 
     @Test
     void shouldReadAllEntitiesFromJson() throws IOException {
-        Map<String, MockEntity> read = new JsonReader().read(MOCK_DATA_JSON, MockEntity.class);
+        Map<String, MockEntity> read = new JsonReader().read(resourceData.getFile(), MockEntity.class);
 
         assertThat(read, aMapWithSize(3));
     }
 
     @Test
     void shouldCreateIndexReadEntitiesById() throws IOException {
-        Map<String, MockEntity> read = new JsonReader().read(MOCK_DATA_JSON, MockEntity.class);
+        Map<String, MockEntity> read = new JsonReader().read(resourceData.getFile(), MockEntity.class);
 
         assertThat(read.get(ENTITY1_ID), org.hamcrest.core.Is.is(new MockEntity(ENTITY1_ID, ENTITY1_NAME)));
         assertThat(read.get(ENTITY2_ID), org.hamcrest.core.Is.is(new MockEntity(ENTITY2_ID, ENTITY2_NAME)));

@@ -22,6 +22,7 @@ import com.mgo.search.service.SearchService;
 import com.mgo.search.service.SearchServiceImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.ClassPathResource;
 
 import java.io.IOException;
 
@@ -35,17 +36,17 @@ public class SearchAppConfig {
 
     @Bean
     public Repository<UserEntity> userEntityRepository(JsonReader jsonReader) throws IOException {
-        return new UserJsonRepository("data/users.json", jsonReader);
+        return new UserJsonRepository(new ClassPathResource("data/users.json").getFile(), jsonReader);
     }
 
     @Bean
     public Repository<OrganizationEntity> organizationEntityRepository(JsonReader jsonReader) throws IOException {
-        return new OrganizationJsonRepository("data/organizations.json", jsonReader);
+        return new OrganizationJsonRepository(new ClassPathResource("data/organizations.json").getFile(), jsonReader);
     }
 
     @Bean
     public Repository<TicketEntity> ticketEntityRepository(JsonReader jsonReader) throws IOException {
-        return new TicketJsonRepository("data/tickets.json", jsonReader);
+        return new TicketJsonRepository(new ClassPathResource("data/tickets.json").getFile(), jsonReader);
     }
 
     @Bean

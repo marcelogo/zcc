@@ -3,6 +3,7 @@ package com.mgo.search.reposiory;
 import com.mgo.search.reposiory.reader.JsonReader;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.core.io.ClassPathResource;
 
 import java.io.IOException;
 import java.util.Set;
@@ -21,7 +22,7 @@ class TicketJsonRepositoryTest {
 
     @BeforeEach
     void setUp() throws IOException {
-        ticketRepo = new TicketJsonRepository("ticketMockData.json", new JsonReader());
+        ticketRepo = new TicketJsonRepository(new ClassPathResource("ticketMockData.json").getFile(), new JsonReader());
     }
 
     @Test

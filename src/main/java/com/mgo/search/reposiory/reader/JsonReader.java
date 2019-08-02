@@ -7,21 +7,15 @@ import com.mgo.search.reposiory.entity.Entity;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class JsonReader {
 
-    public <T extends Entity> Map<String, T> read(String filePath, Class<T> clazz) throws IOException {
-        FileReader fr = new FileReader(new File(getResourcePath(filePath)));
+    public <T extends Entity> Map<String, T> read(File dataFile, Class<T> clazz) throws IOException {
+        FileReader fr = new FileReader(dataFile);
         return toEntityIndex(new Gson().fromJson(fr, TypeToken.getParameterized(List.class, clazz).getType()));
-    }
-
-    private String getResourcePath(String filePath) {
-        URL resource = JsonReader.class.getClassLoader().getResource(filePath);
-        return resource.getPath();
     }
 
     private <T extends Entity> Map<String, T> toEntityIndex(List<T> fromJson) {
