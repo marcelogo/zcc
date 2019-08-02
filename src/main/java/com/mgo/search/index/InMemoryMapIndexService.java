@@ -4,7 +4,6 @@ import com.google.gson.annotations.SerializedName;
 import com.mgo.search.reposiory.Repository;
 import com.mgo.search.reposiory.entity.Entity;
 
-import javax.annotation.PostConstruct;
 import java.lang.reflect.Field;
 import java.util.*;
 import java.util.function.Consumer;
@@ -15,6 +14,7 @@ public class InMemoryMapIndexService<T extends Entity> implements IndexService {
     private Map<String, Map<String, Set<String>>> index;
     private Repository<T> entityRepository;
     private FieldValueExtractor fieldValueExtractor;
+    private boolean indexed = false;
 
     public InMemoryMapIndexService(Repository<T> entityRepository, FieldValueExtractor fieldValueExtractor) {
         this.entityRepository = entityRepository;
@@ -22,14 +22,15 @@ public class InMemoryMapIndexService<T extends Entity> implements IndexService {
         this.index = new HashMap<>();
     }
 
-    //TODO maybe lazy init?????? Remove from interface???
-    @PostConstruct
-    void index() {
+    private void indexIfNeeded() {
+        if (indexed) return;
         entityRepository.findAll().forEach(indexFields());
+        indexed = true;
     }
 
     @Override
     public Collection<String> search(String field, String pattern) {
+        indexIfNeeded();
         Map<String, Set<String>> valueSetMap = index.getOrDefault(field, Collections.emptyMap());
         return new ArrayList<>(valueSetMap.getOrDefault(pattern, Collections.emptySet()));
     }

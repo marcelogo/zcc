@@ -51,8 +51,6 @@ class InMemoryMapIndexServiceTest {
 
     @Test
     void shouldReturnEntityIdWhenSearchPatternMatchesCompletelyAnyFieldToken() {
-        indexService.index();
-
         Collection<String> ids = indexService.search("stringField", "word");
         assertThat(ids, hasSize(1));
         assertThat(ids, hasItem(ENTITY_ID));
@@ -63,8 +61,6 @@ class InMemoryMapIndexServiceTest {
         when(fieldValueExtractor.valueAsString(eq(entity2), any(Field.class))).thenReturn(COMMON_FIELD_VALUE_OF_TWO_ENTITIES);
         when(fieldValueExtractor.valueAsString(eq(entity3), any(Field.class))).thenReturn(COMMON_FIELD_VALUE_OF_TWO_ENTITIES);
 
-        indexService.index();
-
         Collection<String> ids = indexService.search("stringField", "trees");
         assertThat(ids, hasSize(2));
         assertThat(ids, hasItems(ENTITY2_ID, ENTITY3_ID));
@@ -73,8 +69,6 @@ class InMemoryMapIndexServiceTest {
     @Test
     void shouldBeAbleToSearchFieldBySerializedName(){
         when(fieldValueExtractor.valueAsString(eq(entity3), any(Field.class))).thenReturn("search me with my other name");
-
-        indexService.index();
 
         Collection<String> ids = indexService.search("_serialized_name", "other");
         assertThat(ids, hasSize(1));
