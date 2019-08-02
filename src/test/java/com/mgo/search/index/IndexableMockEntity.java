@@ -1,5 +1,6 @@
 package com.mgo.search.index;
 
+import com.google.gson.annotations.SerializedName;
 import com.mgo.search.reposiory.entity.Entity;
 
 import java.util.Collection;
@@ -13,6 +14,16 @@ class IndexableMockEntity implements Entity {
     private boolean booleanField;
     private Collection<Object> collectionField;
     private Object nullableField;
+    @SerializedName("_serialized_name")
+    private Object fieldWithSerializableName;
+
+    IndexableMockEntity(){}
+
+    IndexableMockEntity(String entityId){
+        this();
+        setId(entityId);
+    }
+
 
     @Override
     public String getId() {
@@ -69,5 +80,13 @@ class IndexableMockEntity implements Entity {
 
     public void setNullableField(Object nullableField) {
         this.nullableField = nullableField;
+    }
+
+    public Object getFieldWithSerializableName() {
+        return fieldWithSerializableName;
+    }
+
+    public void setFieldWithSerializableName(Object fieldWithSerializableName) {
+        this.fieldWithSerializableName = fieldWithSerializableName;
     }
 }

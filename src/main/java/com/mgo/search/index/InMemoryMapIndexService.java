@@ -1,0 +1,66 @@
+package com.mgo.search.index;
+
+import com.google.gson.annotations.SerializedName;
+import com.mgo.search.reposiory.Repository;
+import com.mgo.search.reposiory.entity.Entity;
+
+import javax.annotation.PostConstruct;
+import java.lang.reflect.Field;
+import java.util.*;
+import java.util.function.Consumer;
+
+public class InMemoryMapIndexService<T extends Entity> implements IndexService {
+
+    private static final String STRING_SEPARATOR = " ";
+    private Map<String, Map<String, Set<String>>> index;
+    private Repository<T> entityRepository;
+    private FieldValueExtractor fieldValueExtractor;
+
+    public InMemoryMapIndexService(Repository<T> entityRepository, FieldValueExtractor fieldValueExtractor) {
+        this.entityRepository = entityRepository;
+        this.fieldValueExtractor = fieldValueExtractor;
+        this.index = new HashMap<>();
+    }
+
+    //TODO maybe lazy init?????? Remove from interface???
+    @PostConstruct
+    void index() {
+        entityRepository.findAll().forEach(indexFields());
+    }
+
+    @Override
+    public Collection<String> search(String field, String pattern) {
+        Map<String, Set<String>> valueSetMap = index.getOrDefault(field, Collections.emptyMap());
+        return new ArrayList<>(valueSetMap.getOrDefault(pattern, Collections.emptySet()));
+    }
+
+    private Consumer<T> indexFields() {
+        return entity -> {
+            for (Field field : entity.getClass().getDeclaredFields()) {
+                tokenizeAndIndexFieldValues(entity.getId(), field, fieldValueExtractor.valueAsString(entity, field));
+            }
+        };
+    }
+
+    private void tokenizeAndIndexFieldValues(String entityId, Field field, Object fieldValue) {
+        Arrays.stream(fieldValue.toString().split(STRING_SEPARATOR))
+                .forEach(t -> indexFieldValueByToken(entityId, field, t));
+    }
+
+    private void indexFieldValueByToken(String entityId, Field field, String token) {
+        String fieldName = jsonFieldNameFor(field);
+
+        Map<String, Set<String>> fieldIndex = index.getOrDefault(fieldName, new HashMap<>());
+        index.putIfAbsent(fieldName, fieldIndex);
+
+        Set<String> fieldTokenIndex = fieldIndex.getOrDefault(token, new HashSet<>());
+        fieldTokenIndex.add(entityId);
+        fieldIndex.putIfAbsent(token, fieldTokenIndex);
+    }
+
+    private String jsonFieldNameFor(Field field) {
+        SerializedName serializedName = field.getAnnotation(SerializedName.class);
+        return serializedName != null ? serializedName.value() : field.getName();
+    }
+
+}
