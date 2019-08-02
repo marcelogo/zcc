@@ -1,37 +1,34 @@
 package com.mgo.search.model;
 
-import java.util.Date;
-import java.util.Locale;
 import java.util.Set;
-import java.util.TimeZone;
 
-public class User {
+public class User implements PresentationDto {
 
-    private long id;
+    private String id;
     private String url;
     private String externalId;
     private String name;
     private String alias;
-    private Date createdAt;
+    private String createdAt;
     private boolean active;
     private boolean verified;
     private boolean shared;
-    private Locale locale;
-    private TimeZone timezone;
-    private Date lastLoginAt;
+    private String locale;
+    private String timezone;
+    private String lastLoginAt;
     private String email;
     private String phone;
     private String signature;
-    private long organizationId;
+    private Organization organization;
     private Set<String> tags;
     private boolean suspended;
     private String role;
 
-    public long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -67,11 +64,11 @@ public class User {
         this.alias = alias;
     }
 
-    public Date getCreatedAt() {
+    public String getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(Date createdAt) {
+    public void setCreatedAt(String createdAt) {
         this.createdAt = createdAt;
     }
 
@@ -99,27 +96,27 @@ public class User {
         this.shared = shared;
     }
 
-    public Locale getLocale() {
+    public String getLocale() {
         return locale;
     }
 
-    public void setLocale(Locale locale) {
+    public void setLocale(String locale) {
         this.locale = locale;
     }
 
-    public TimeZone getTimezone() {
+    public String getTimezone() {
         return timezone;
     }
 
-    public void setTimezone(TimeZone timezone) {
+    public void setTimezone(String timezone) {
         this.timezone = timezone;
     }
 
-    public Date getLastLoginAt() {
+    public String getLastLoginAt() {
         return lastLoginAt;
     }
 
-    public void setLastLoginAt(Date lastLoginAt) {
+    public void setLastLoginAt(String lastLoginAt) {
         this.lastLoginAt = lastLoginAt;
     }
 
@@ -147,12 +144,12 @@ public class User {
         this.signature = signature;
     }
 
-    public long getOrganizationId() {
-        return organizationId;
+    public Organization getOrganization() {
+        return organization;
     }
 
-    public void setOrganizationId(long organizationId) {
-        this.organizationId = organizationId;
+    public void setOrganization(Organization organization) {
+        this.organization = organization;
     }
 
     public Set<String> getTags() {
@@ -178,6 +175,4 @@ public class User {
     public void setRole(String role) {
         this.role = role;
     }
-
-
 }

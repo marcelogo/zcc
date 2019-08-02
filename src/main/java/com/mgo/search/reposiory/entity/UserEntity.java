@@ -28,7 +28,7 @@ public class UserEntity implements Entity {
     private String phone;
     private String signature;
     @SerializedName("organization_id")
-    private long organizationId;
+    private String organizationId;
     private Set<String> tags;
     private boolean suspended;
     private String role;
@@ -153,11 +153,11 @@ public class UserEntity implements Entity {
         this.signature = signature;
     }
 
-    public long getOrganizationId() {
+    public String getOrganizationId() {
         return organizationId;
     }
 
-    public void setOrganizationId(long organizationId) {
+    public void setOrganizationId(String organizationId) {
         this.organizationId = organizationId;
     }
 
