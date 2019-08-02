@@ -8,7 +8,7 @@ import java.lang.reflect.Field;
 import java.util.*;
 import java.util.function.Consumer;
 
-public class InMemoryMapIndexService<T extends Entity> implements IndexService {
+public class InMemoryMapIndexService<T extends Entity> implements IndexService<T> {
 
     private static final String STRING_SEPARATOR = " ";
     private Map<String, Map<String, Set<String>>> index;

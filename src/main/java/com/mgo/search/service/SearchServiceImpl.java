@@ -9,7 +9,7 @@ import com.mgo.search.reposiory.entity.Entity;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
-public class SearchServiceImpl<E extends Entity, P extends PresentationDto> implements SearchService {
+public class SearchServiceImpl<E extends Entity, P extends PresentationDto> implements SearchService<P> {
 
     private IndexService<E> indexService;
     private Repository<E> repository;
