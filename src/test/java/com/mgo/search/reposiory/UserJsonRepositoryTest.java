@@ -106,7 +106,7 @@ class UserJsonRepositoryTest {
 
     @Test
     void shouldReadUserOrganizationId(){
-        assertThat(userRepo.byId(ENTITY_ID).getOrganizationId(), is( 119L));
+        assertThat(userRepo.byId(ENTITY_ID).getOrganizationId(), is( "119"));
     }
 
     @Test
