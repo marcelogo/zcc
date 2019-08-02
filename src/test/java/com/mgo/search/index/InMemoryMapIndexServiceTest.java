@@ -9,6 +9,7 @@ import org.mockito.MockitoAnnotations;
 import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -35,6 +36,8 @@ class InMemoryMapIndexServiceTest {
     @Mock
     private FieldValueExtractor fieldValueExtractor;
 
+    private IndexFieldNameResolver fieldNameResolver = new SerializedFieldNameResolverImpl();
+
     private InMemoryMapIndexService<IndexableMockEntity> indexService;
 
     @BeforeEach
@@ -46,7 +49,7 @@ class InMemoryMapIndexServiceTest {
         when(fieldValueExtractor.valueAsString(eq(entity2), any(Field.class))).thenReturn("entity2");
         when(fieldValueExtractor.valueAsString(eq(entity3), any(Field.class))).thenReturn("entity3");
 
-        indexService = new InMemoryMapIndexService<>(repository, fieldValueExtractor);
+        indexService = new InMemoryMapIndexService<>(repository, fieldValueExtractor, fieldNameResolver);
     }
 
     @Test
@@ -73,6 +76,14 @@ class InMemoryMapIndexServiceTest {
         Collection<String> ids = indexService.search("_serialized_name", "other");
         assertThat(ids, hasSize(1));
         assertThat(ids, hasItems(ENTITY3_ID));
+    }
+
+    @Test
+    void shouldReturnAllFieldNamesForGivenEntity(){
+        List<String> fieldNames = indexService.indexableFieldsFor(IndexableMockEntity.class);
+
+        assertThat(fieldNames, hasSize(IndexableMockEntity.class.getDeclaredFields().length));
+        assertThat(fieldNames, org.hamcrest.Matchers.contains("id", "stringField", "longField", "intField", "booleanField", "collectionField", "nullableField", "_serialized_name"));
     }
 
 }

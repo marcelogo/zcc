@@ -4,9 +4,7 @@ import com.mgo.search.converter.OrganizationMarshaller;
 import com.mgo.search.converter.PresentationMarshaller;
 import com.mgo.search.converter.TicketMarshaller;
 import com.mgo.search.converter.UserMarshaller;
-import com.mgo.search.index.FieldValueExtractor;
-import com.mgo.search.index.InMemoryMapIndexService;
-import com.mgo.search.index.IndexService;
+import com.mgo.search.index.*;
 import com.mgo.search.model.Organization;
 import com.mgo.search.model.Ticket;
 import com.mgo.search.model.User;
@@ -55,21 +53,29 @@ public class SearchAppConfig {
     }
 
     @Bean
+    public IndexFieldNameResolver fieldNameResolver() {
+        return new SerializedFieldNameResolverImpl();
+    }
+
+    @Bean
     public IndexService<OrganizationEntity> organizationEntityIndexService(Repository<OrganizationEntity> organizationEntityRepository,
-                                                                           FieldValueExtractor fieldValueExtractor) {
-        return new InMemoryMapIndexService<>(organizationEntityRepository, fieldValueExtractor);
+                                                                           FieldValueExtractor fieldValueExtractor,
+                                                                           IndexFieldNameResolver fieldNameResolver) {
+        return new InMemoryMapIndexService<>(organizationEntityRepository, fieldValueExtractor, fieldNameResolver);
     }
 
     @Bean
     public IndexService<UserEntity> userEntityIndexService(Repository<UserEntity> userEntityRepository,
-                                                           FieldValueExtractor fieldValueExtractor) {
-        return new InMemoryMapIndexService<>(userEntityRepository, fieldValueExtractor);
+                                                           FieldValueExtractor fieldValueExtractor,
+                                                           IndexFieldNameResolver fieldNameResolver) {
+        return new InMemoryMapIndexService<>(userEntityRepository, fieldValueExtractor, fieldNameResolver);
     }
 
     @Bean
     public IndexService<TicketEntity> ticketEntityIndexService(Repository<TicketEntity> ticketEntityRepository,
-                                                               FieldValueExtractor fieldValueExtractor) {
-        return new InMemoryMapIndexService<>(ticketEntityRepository, fieldValueExtractor);
+                                                               FieldValueExtractor fieldValueExtractor,
+                                                               IndexFieldNameResolver fieldNameResolver) {
+        return new InMemoryMapIndexService<>(ticketEntityRepository, fieldValueExtractor, fieldNameResolver);
     }
 
     @Bean

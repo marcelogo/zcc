@@ -1,12 +1,12 @@
 package com.mgo.search.index;
 
-import com.google.gson.annotations.SerializedName;
 import com.mgo.search.reposiory.Repository;
 import com.mgo.search.reposiory.entity.Entity;
 
 import java.lang.reflect.Field;
 import java.util.*;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 public class InMemoryMapIndexService<T extends Entity> implements IndexService<T> {
 
@@ -14,11 +14,13 @@ public class InMemoryMapIndexService<T extends Entity> implements IndexService<T
     private Map<String, Map<String, Set<String>>> index;
     private Repository<T> entityRepository;
     private FieldValueExtractor fieldValueExtractor;
+    private IndexFieldNameResolver fieldNameResolver;
     private boolean indexed = false;
 
-    public InMemoryMapIndexService(Repository<T> entityRepository, FieldValueExtractor fieldValueExtractor) {
+    public InMemoryMapIndexService(Repository<T> entityRepository, FieldValueExtractor fieldValueExtractor, IndexFieldNameResolver fieldNameResolver) {
         this.entityRepository = entityRepository;
         this.fieldValueExtractor = fieldValueExtractor;
+        this.fieldNameResolver = fieldNameResolver;
         this.index = new HashMap<>();
     }
 
@@ -26,6 +28,13 @@ public class InMemoryMapIndexService<T extends Entity> implements IndexService<T
         if (indexed) return;
         entityRepository.findAll().forEach(indexFields());
         indexed = true;
+    }
+
+    @Override
+    public List<String> indexableFieldsFor(Class<T> clazz) {
+        return Arrays.stream(clazz.getDeclaredFields())
+                .map(f -> fieldNameResolver.fieldNameFor(f))
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -49,7 +58,7 @@ public class InMemoryMapIndexService<T extends Entity> implements IndexService<T
     }
 
     private void indexFieldValueByToken(String entityId, Field field, String token) {
-        String fieldName = jsonFieldNameFor(field);
+        String fieldName = fieldNameResolver.fieldNameFor(field);
 
         Map<String, Set<String>> fieldIndex = index.getOrDefault(fieldName, new HashMap<>());
         index.putIfAbsent(fieldName, fieldIndex);
@@ -57,11 +66,6 @@ public class InMemoryMapIndexService<T extends Entity> implements IndexService<T
         Set<String> fieldTokenIndex = fieldIndex.getOrDefault(token, new HashSet<>());
         fieldTokenIndex.add(entityId);
         fieldIndex.putIfAbsent(token, fieldTokenIndex);
-    }
-
-    private String jsonFieldNameFor(Field field) {
-        SerializedName serializedName = field.getAnnotation(SerializedName.class);
-        return serializedName != null ? serializedName.value() : field.getName();
     }
 
 }
