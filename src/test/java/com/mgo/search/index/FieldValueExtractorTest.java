@@ -17,8 +17,8 @@ class FieldValueExtractorTest {
     private static final long LONG_FIELD_VALUE = 9239121739217392L;
     private static final int INT_FIELD_VALUE = 135;
     private static final String STRING_FIELD_VALUE = "stringField";
-    private IndexableMockEntity entity;
     private Object mockField = null;
+    private IndexableMockEntity entity;
 
     private FieldValueExtractor extractor = new FieldValueExtractor();
 
