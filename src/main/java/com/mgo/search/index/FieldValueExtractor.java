@@ -21,11 +21,10 @@ public class FieldValueExtractor {
         if (fieldValue == null) {
             return DEFAULT_VALUE;
         } else if (Collection.class.isAssignableFrom(fieldValue.getClass())){
-            Collection collectionFieldValue = (Collection) fieldValue;
+            Collection<?> collectionFieldValue = (Collection) fieldValue;
             return collectionFieldValue.stream()
                     .map(String::valueOf)
-                    .collect(Collectors.joining(STRING_SEPARATOR))
-                    .toString();
+                    .collect(Collectors.joining(STRING_SEPARATOR));
         }
 
         return String.valueOf(fieldValue);
