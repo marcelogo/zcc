@@ -18,6 +18,8 @@ import com.mgo.search.reposiory.entity.UserEntity;
 import com.mgo.search.reposiory.reader.JsonReader;
 import com.mgo.search.service.SearchService;
 import com.mgo.search.service.SearchServiceImpl;
+import com.mgo.search.service.SearchableFieldService;
+import com.mgo.search.shell.render.SearchableFieldRenderer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
@@ -115,5 +117,15 @@ public class SearchAppConfig {
                                                    Repository<TicketEntity> ticketRepository,
                                                    PresentationMarshaller<TicketEntity, Ticket> ticketMarshaller) {
         return new SearchServiceImpl<>(ticketEntityIndexService, ticketRepository, ticketMarshaller);
+    }
+
+    @Bean
+    public SearchableFieldService searchableFieldService(IndexFieldNameResolver fieldNameResolver){
+        return new SearchableFieldService(fieldNameResolver);
+    }
+
+    @Bean
+    public SearchableFieldRenderer searchableFieldRenderer() {
+        return new SearchableFieldRenderer();
     }
 }
