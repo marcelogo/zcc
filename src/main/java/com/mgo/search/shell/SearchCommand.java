@@ -30,7 +30,7 @@ public class SearchCommand {
     }
 
     @SuppressWarnings("unchecked")
-    @ShellMethod("Ful word search on fields of Organizations, Users or Tickets")
+    @ShellMethod("Full word match on field values of Organizations, Users or Tickets")
     public String search(@ShellOption(help = "Entity name. It can be [Organization | User | Ticket]") String entity,
                          @ShellOption(help = "Field to search. For field info see show-fields command.") String field,
                          @ShellOption(help = "Value to search (full work match only)") String word) {
