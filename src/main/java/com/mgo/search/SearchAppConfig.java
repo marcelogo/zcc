@@ -16,15 +16,20 @@ import com.mgo.search.reposiory.entity.OrganizationEntity;
 import com.mgo.search.reposiory.entity.TicketEntity;
 import com.mgo.search.reposiory.entity.UserEntity;
 import com.mgo.search.reposiory.reader.JsonReader;
+import com.mgo.search.service.EntityType;
 import com.mgo.search.service.SearchService;
 import com.mgo.search.service.SearchServiceImpl;
 import com.mgo.search.service.SearchableFieldService;
+import com.mgo.search.shell.render.FieldValueRenderer;
+import com.mgo.search.shell.render.PresentationDtoRenderer;
 import com.mgo.search.shell.render.SearchableFieldRenderer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 @Configuration
 public class SearchAppConfig {
@@ -114,18 +119,39 @@ public class SearchAppConfig {
 
     @Bean
     public SearchService<Ticket> ticketSearchService(IndexService<TicketEntity> ticketEntityIndexService,
-                                                   Repository<TicketEntity> ticketRepository,
-                                                   PresentationMarshaller<TicketEntity, Ticket> ticketMarshaller) {
+                                                     Repository<TicketEntity> ticketRepository,
+                                                     PresentationMarshaller<TicketEntity, Ticket> ticketMarshaller) {
         return new SearchServiceImpl<>(ticketEntityIndexService, ticketRepository, ticketMarshaller);
     }
 
     @Bean
-    public SearchableFieldService searchableFieldService(IndexFieldNameResolver fieldNameResolver){
+    public SearchableFieldService searchableFieldService(IndexFieldNameResolver fieldNameResolver) {
         return new SearchableFieldService(fieldNameResolver);
     }
 
     @Bean
-    public SearchableFieldRenderer searchableFieldRenderer() {
-        return new SearchableFieldRenderer();
+    public SearchableFieldRenderer searchableFieldRenderer(SearchableFieldService searchableFieldService) {
+        return new SearchableFieldRenderer(searchableFieldService);
+    }
+
+    @Bean
+    public FieldValueRenderer fieldValueRenderer() {
+        return new FieldValueRenderer();
+    }
+
+    @Bean
+    public PresentationDtoRenderer presentationDtoRenderer(FieldValueRenderer fieldValueRenderer) {
+        return new PresentationDtoRenderer(fieldValueRenderer);
+    }
+
+    @Bean
+    public Map<EntityType, SearchService> searchServiceMap(SearchService<Organization> orgSearch,
+                                                           SearchService<User> userSearch,
+                                                           SearchService<Ticket> ticketSearchService) {
+        Map<EntityType, SearchService> map = new HashMap<>();
+        map.put(EntityType.ORGANIZATION, orgSearch);
+        map.put(EntityType.USER, userSearch);
+        map.put(EntityType.TICKET, ticketSearchService);
+        return map;
     }
 }
