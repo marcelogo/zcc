@@ -2,7 +2,7 @@ package com.mgo.search.shell;
 
 import com.mgo.search.service.EntityType;
 import com.mgo.search.service.SearchService;
-import com.mgo.search.shell.render.PresentationDtoRenderer;
+import com.mgo.search.shell.render.PresentationDtoRendererResolver;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -28,7 +28,7 @@ class SearchCommandTest {
     @Mock
     private Map<EntityType, SearchService> searchServiceMap;
     @Mock
-    private PresentationDtoRenderer dtoRenderer;
+    private PresentationDtoRendererResolver rendererResolver;
     @Mock
     private SearchService<SimpleMockDto> searchService;
 
@@ -40,7 +40,7 @@ class SearchCommandTest {
 
         when(searchServiceMap.get(any(EntityType.class))).thenReturn(searchService);
 
-        searchCommand = new SearchCommand(searchServiceMap, dtoRenderer);
+        searchCommand = new SearchCommand(searchServiceMap, rendererResolver);
     }
 
     @ParameterizedTest
@@ -51,9 +51,9 @@ class SearchCommandTest {
 
         when(searchService.search(SEARCH_FIELD, SEARCH_VALUE)).thenReturn(Arrays.asList(result1, result2));
         String renderedResult1 = "rendered result 1";
-        when(dtoRenderer.render(result1)).thenReturn(renderedResult1);
+        when(rendererResolver.render(result1)).thenReturn(renderedResult1);
         String renderedResult2 = "rendered result 2";
-        when(dtoRenderer.render(result2)).thenReturn(renderedResult2);
+        when(rendererResolver.render(result2)).thenReturn(renderedResult2);
 
         String renderedResults = searchCommand.search(entity, SEARCH_FIELD, SEARCH_VALUE);
 

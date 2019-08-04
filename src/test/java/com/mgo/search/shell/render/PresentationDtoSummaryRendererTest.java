@@ -12,7 +12,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.when;
 
-class PresentationDtoRendererTest {
+class PresentationDtoSummaryRendererTest {
 
     private static final int ID = 987654321;
     private static final String NAME = "I'm a little mock";
@@ -22,13 +22,13 @@ class PresentationDtoRendererTest {
     @Mock
     private FieldValueRenderer fieldValueRenderer;
 
-    private PresentationDtoRenderer renderer;
+    private PresentationDtoSummaryRenderer renderer;
 
     @BeforeEach
     void setUp(){
         MockitoAnnotations.initMocks(this);
 
-        renderer = new PresentationDtoRenderer(fieldValueRenderer);
+        renderer = new PresentationDtoSummaryRenderer(fieldValueRenderer);
     }
 
     @Test
@@ -39,11 +39,9 @@ class PresentationDtoRendererTest {
         when(fieldValueRenderer.render(simpleMockDto, getMockFieldByName("name"))).thenReturn(name_field_information);
 
         String expected = "SimpleMockDto" +
-                System.lineSeparator() +
-                "--------------------------------------------" +
-                System.lineSeparator() +
+                TestConstants.HORIZONTAL_BAR +
                 id_field_information +
-                System.lineSeparator() +
+                TestConstants.LINE_SEPARATOR +
                 name_field_information;
 
         assertThat(renderer.render(simpleMockDto), is(expected));

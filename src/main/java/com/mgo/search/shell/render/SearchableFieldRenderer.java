@@ -6,7 +6,7 @@ import com.mgo.search.service.SearchableFieldService;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
-public class SearchableFieldRenderer {
+public class SearchableFieldRenderer implements Renderer {
 
     private SearchableFieldService searchableFieldService;
 
@@ -20,9 +20,7 @@ public class SearchableFieldRenderer {
 
     private String renderEntityAndFields(String entityName, Collection<String> fields) {
         return entityName +
-                System.lineSeparator() +
-                "------------------------------------------------" +
-                System.lineSeparator() +
+                HORIZONTAL_BAR +
                 fields.stream().map(f -> "    " + f).collect(Collectors.joining(System.lineSeparator()));
     }
 }

@@ -23,7 +23,7 @@ class SearchableFieldRendererTest {
     private SearchableFieldRenderer renderer;
 
     @BeforeEach
-    void setUp(){
+    void setUp() {
         MockitoAnnotations.initMocks(this);
 
         when(searchableFieldService.searchableFieldsFor(any(EntityType.class))).thenReturn(Arrays.asList("field1", "field2"));
@@ -33,17 +33,14 @@ class SearchableFieldRendererTest {
 
     @ParameterizedTest
     @EnumSource(EntityType.class)
-    void shouldCreateStringWithEntityNameFollowedByFieldNamesSeparatedByNewLine(EntityType entityType){
+    void shouldCreateStringWithEntityNameFollowedByFieldNamesSeparatedByNewLine(EntityType entityType) {
         String actual = renderer.renderForType(entityType);
 
-        String expected = new StringBuilder(entityType.name())
-                .append(System.lineSeparator())
-                .append("------------------------------------------------")
-                .append(System.lineSeparator())
-                .append("    field1")
-                .append(System.lineSeparator())
-                .append("    field2")
-                .toString();
+        String expected = entityType.name() +
+                TestConstants.HORIZONTAL_BAR +
+                "    field1" +
+                TestConstants.LINE_SEPARATOR +
+                "    field2";
 
         assertThat(actual, is(expected));
 

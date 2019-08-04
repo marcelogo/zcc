@@ -20,9 +20,7 @@ import com.mgo.search.service.EntityType;
 import com.mgo.search.service.SearchService;
 import com.mgo.search.service.SearchServiceImpl;
 import com.mgo.search.service.SearchableFieldService;
-import com.mgo.search.shell.render.FieldValueRenderer;
-import com.mgo.search.shell.render.PresentationDtoRenderer;
-import com.mgo.search.shell.render.SearchableFieldRenderer;
+import com.mgo.search.shell.render.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
@@ -140,8 +138,8 @@ public class SearchAppConfig {
     }
 
     @Bean
-    public PresentationDtoRenderer presentationDtoRenderer(FieldValueRenderer fieldValueRenderer) {
-        return new PresentationDtoRenderer(fieldValueRenderer);
+    public PresentationDtoSummaryRenderer presentationDtoRenderer(FieldValueRenderer fieldValueRenderer) {
+        return new PresentationDtoSummaryRenderer(fieldValueRenderer);
     }
 
     @Bean
@@ -154,4 +152,34 @@ public class SearchAppConfig {
         map.put(EntityType.TICKET, ticketSearchService);
         return map;
     }
+
+    @Bean
+    public UserRenderer userRenderer(PresentationDtoSummaryRenderer presentationDtoRenderer,
+                                     SearchService<Ticket> ticketSearchService){
+        return new UserRenderer(presentationDtoRenderer, ticketSearchService);
+    }
+
+    @Bean
+    public OrganizationRenderer organizationRenderer(PresentationDtoSummaryRenderer presentationDtoRenderer,
+                                                     SearchService<User> userSearchService,
+                                                     SearchService<Ticket> ticketSearchService){
+        return new OrganizationRenderer(presentationDtoRenderer, userSearchService, ticketSearchService);
+    }
+
+    @Bean
+    public TicketRenderer ticketRenderer(PresentationDtoSummaryRenderer presentationDtoRenderer){
+        return new TicketRenderer(presentationDtoRenderer);
+    }
+
+    @Bean
+    public PresentationDtoRendererResolver presentationDtoRendererResolver(OrganizationRenderer organizationRenderer,
+                                                                           UserRenderer userRenderer,
+                                                                           TicketRenderer ticketRenderer){
+        Map<EntityType, PresentationDtoRenderer> map = new HashMap<>();
+        map.put(EntityType.ORGANIZATION, organizationRenderer);
+        map.put(EntityType.USER, userRenderer);
+        map.put(EntityType.TICKET, ticketRenderer);
+        return new PresentationDtoRendererResolver(map);
+    }
+
 }

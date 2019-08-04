@@ -1,0 +1,23 @@
+package com.mgo.search.shell.render;
+
+import com.mgo.search.model.PresentationDto;
+
+import java.util.Arrays;
+import java.util.stream.Collectors;
+
+public class PresentationDtoSummaryRenderer implements Renderer {
+    private FieldValueRenderer fieldValueRenderer;
+
+    public PresentationDtoSummaryRenderer(FieldValueRenderer fieldValueRenderer) {
+        this.fieldValueRenderer = fieldValueRenderer;
+    }
+
+    public String render(PresentationDto dto) {
+        return dto.getClass().getSimpleName() +
+                HORIZONTAL_BAR +
+                Arrays.stream(dto.getClass().getDeclaredFields())
+                        .map(field -> fieldValueRenderer.render(dto, field))
+                        .collect(Collectors.joining(System.lineSeparator()));
+    }
+
+}

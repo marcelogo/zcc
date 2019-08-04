@@ -10,7 +10,7 @@ import java.lang.reflect.Field;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
-public class FieldValueRenderer {
+public class FieldValueRenderer implements Renderer {
 
     private static final String DEFAULT_VALUE = Strings.EMPTY;
     private static final String STRING_SEPARATOR = " ";

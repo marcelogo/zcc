@@ -3,7 +3,9 @@ package com.mgo.search.shell;
 import com.mgo.search.model.PresentationDto;
 import com.mgo.search.service.EntityType;
 import com.mgo.search.service.SearchService;
-import com.mgo.search.shell.render.PresentationDtoRenderer;
+import com.mgo.search.shell.render.PresentationDtoRendererResolver;
+import com.mgo.search.shell.render.PresentationDtoSummaryRenderer;
+import com.mgo.search.shell.render.Renderer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
@@ -19,14 +21,14 @@ public class SearchCommand {
     private static final CharSequence DOUBLE_NEW_LINE = System.lineSeparator() + System.lineSeparator();
 
     private Map<EntityType, SearchService> entitySearchMap;
-    private PresentationDtoRenderer renderer;
+    private PresentationDtoRendererResolver rendererResolver;
 
     @Autowired
-    public SearchCommand(Map<EntityType, SearchService> searchServiceMap, PresentationDtoRenderer renderer) {
+    public SearchCommand(Map<EntityType, SearchService> searchServiceMap, PresentationDtoRendererResolver rendererResolver) {
         super();
 
         this.entitySearchMap = searchServiceMap;
-        this.renderer = renderer;
+        this.rendererResolver = rendererResolver;
     }
 
     @SuppressWarnings("unchecked")
@@ -42,7 +44,7 @@ public class SearchCommand {
                 return "No results found for criteria.";
             }
 
-            return results.stream().map(renderer::render).collect(Collectors.joining(DOUBLE_NEW_LINE));
+            return results.stream().map(rendererResolver::render).collect(Collectors.joining(DOUBLE_NEW_LINE));
         } catch (IllegalAccessException e) {
             return e.getMessage();
         }
