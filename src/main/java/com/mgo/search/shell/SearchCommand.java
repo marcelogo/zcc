@@ -4,8 +4,6 @@ import com.mgo.search.model.PresentationDto;
 import com.mgo.search.service.EntityType;
 import com.mgo.search.service.SearchService;
 import com.mgo.search.shell.render.PresentationDtoRendererResolver;
-import com.mgo.search.shell.render.PresentationDtoSummaryRenderer;
-import com.mgo.search.shell.render.Renderer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
@@ -33,9 +31,9 @@ public class SearchCommand {
 
     @SuppressWarnings("unchecked")
     @ShellMethod("Full word match on field values of Organizations, Users or Tickets")
-    public String search(@ShellOption(help = "Entity name. It can be [Organization | User | Ticket]") String entity,
+    public String search(@ShellOption(help = "Entity name. It can be [Organization | User | Ticket].") String entity,
                          @ShellOption(help = "Field to search. For field info see show-fields command.") String field,
-                         @ShellOption(help = "Value to search (full work match only)") String word) {
+                         @ShellOption(help = "Value to search (full work match only). Omit it for empty value search.", defaultValue = "") String word) {
 
         try {
             Collection<? extends PresentationDto> results = getServiceForEntity(entity).search(field, word);
