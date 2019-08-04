@@ -14,6 +14,7 @@ import java.util.Locale;
 import java.util.Set;
 import java.util.UUID;
 
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasItems;
 import static org.hamcrest.Matchers.is;
@@ -193,6 +194,11 @@ class UserMarshallerTest {
         when(entity.getRole()).thenReturn(role);
 
         assertThat(marshaller.marshall(entity).getRole(), is(role));
+    }
+
+    @Test
+    void shouldReturnNullWhenEntityIsNull(){
+        assertThat(marshaller.marshall(null), is(nullValue()));
     }
 
 }

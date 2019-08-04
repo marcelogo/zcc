@@ -20,20 +20,21 @@ public class UserRenderer implements PresentationDtoRenderer<User> {
     }
 
     public String render(User user) {
-        return "User Details" +
+        return LINE_SEPARATOR +
+                "User Details" +
                 HORIZONTAL_BAR +
                 renderUser(user) +
-                LINE_SEPARATOR +
+                EMPTY_LINE +
                 "User's organization details" +
-                HORIZONTAL_BAR +
+                HORIZONTAL_BAR + LINE_SEPARATOR +
                 renderOrganizationFromUser(user.getOrganization()) +
-                LINE_SEPARATOR +
+                EMPTY_LINE +
                 "Tickets where user is submitter" +
-                HORIZONTAL_BAR +
+                HORIZONTAL_BAR + LINE_SEPARATOR +
                 renderTicketsFromSubmitter(user.getId()) +
-                LINE_SEPARATOR +
+                EMPTY_LINE +
                 "Tickets where user is assignee" +
-                HORIZONTAL_BAR +
+                HORIZONTAL_BAR + LINE_SEPARATOR +
                 renderTicketsFromAssignee(user.getId());
     }
 
@@ -48,7 +49,7 @@ public class UserRenderer implements PresentationDtoRenderer<User> {
     private String renderTickets(Collection<Ticket> tickets) {
         return tickets.stream()
                 .map(ticket -> presentationDtoSummaryRenderer.render(ticket))
-                .collect(Collectors.joining(System.lineSeparator()));
+                .collect(Collectors.joining(EMPTY_LINE));
     }
 
     private String renderOrganizationFromUser(Organization organization) {

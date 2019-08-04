@@ -21,6 +21,9 @@ public class UserMarshaller implements PresentationMarshaller<UserEntity, User> 
 
     @Override
     public User marshall(UserEntity entity) {
+
+        if (entity == null) return null;
+
         User user = new User();
         user.setId(entity.getId());
         user.setUrl(entity.getUrl());

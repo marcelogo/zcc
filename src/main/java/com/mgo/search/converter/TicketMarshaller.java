@@ -29,6 +29,9 @@ public class TicketMarshaller implements PresentationMarshaller<TicketEntity, Ti
 
     @Override
     public Ticket marshall(TicketEntity entity) {
+
+        if (entity == null) return null;
+
         Ticket ticket = new Ticket();
         ticket.setId(entity.getId());
         ticket.setUrl(entity.getUrl());

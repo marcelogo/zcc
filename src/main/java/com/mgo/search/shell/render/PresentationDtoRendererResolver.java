@@ -18,21 +18,29 @@ public class PresentationDtoRendererResolver implements PresentationDtoRenderer<
     }
 
     @SuppressWarnings("unchecked")
-    public String render(Organization organization) {
+    private String render(Organization organization) {
         return rendererMap.get(EntityType.ORGANIZATION).render(organization);
     }
 
     @SuppressWarnings("unchecked")
-    public String render(User user) {
+    private String render(User user) {
         return rendererMap.get(EntityType.USER).render(user);
     }
 
     @SuppressWarnings("unchecked")
-    public String render(Ticket ticket) {
+    private String render(Ticket ticket) {
         return rendererMap.get(EntityType.TICKET).render(ticket);
     }
 
     public String render(PresentationDto dto) {
+        if (dto instanceof Organization) {
+            return render((Organization) dto);
+        } else if (dto instanceof User) {
+            return render((User) dto);
+        } else if (dto instanceof Ticket) {
+            return render((Ticket) dto);
+        }
+
         throw new NotImplementedException();
     }
 }

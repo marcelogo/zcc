@@ -15,6 +15,7 @@ import org.mockito.internal.util.collections.Sets;
 import java.util.Set;
 import java.util.UUID;
 
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasItems;
 import static org.hamcrest.Matchers.is;
@@ -177,6 +178,11 @@ class TicketMarshallerTest {
         when(entity.getVia()).thenReturn(channel);
 
         assertThat(marshaller.marshall(entity).getChannel(), is(channel));
+    }
+
+    @Test
+    void shouldReturnNullWhenEntityIsNull(){
+        assertThat(marshaller.marshall(null), is(nullValue()));
     }
 
 }

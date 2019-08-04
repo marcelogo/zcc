@@ -47,6 +47,11 @@ class PresentationDtoSummaryRendererTest {
         assertThat(renderer.render(simpleMockDto), is(expected));
     }
 
+    @Test
+    void shouldReturnDataNotFoundMessageWhenDtoIsNull(){
+        assertThat(renderer.render(null), is("Data not found or not assigned"));
+    }
+
     private Field getMockFieldByName(String id) throws NoSuchFieldException {
         return SimpleMockDto.class.getDeclaredField(id);
     }

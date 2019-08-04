@@ -19,8 +19,9 @@ public class SearchableFieldRenderer implements Renderer {
     }
 
     private String renderEntityAndFields(String entityName, Collection<String> fields) {
-        return entityName +
+        return LINE_SEPARATOR +
+                entityName +
                 HORIZONTAL_BAR +
-                fields.stream().map(f -> "    " + f).collect(Collectors.joining(System.lineSeparator()));
+                fields.stream().map(f -> "    " + f).collect(Collectors.joining(LINE_SEPARATOR));
     }
 }

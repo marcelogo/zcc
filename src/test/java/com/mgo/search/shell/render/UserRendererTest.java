@@ -74,7 +74,7 @@ class UserRendererTest {
         Collection<Ticket> submittedTickets = Arrays.asList(submittedTicket1, submittedTicket2);
         when(ticketSearchService.search("submitter_id", USER_ID)).thenReturn(submittedTickets);
 
-        String expected = renderedSubmittedTicker1 + TestConstants.LINE_SEPARATOR + renderedSubmittedTicker2;
+        String expected = renderedSubmittedTicker1 + TestConstants.EMPTY_LINE + renderedSubmittedTicker2;
         assertThat(userRenderer.render(user), containsString(expected));
     }
 
@@ -92,7 +92,7 @@ class UserRendererTest {
         Collection<Ticket> assignedTickets = Arrays.asList(assignedTicket1, assignedTicket2);
         when(ticketSearchService.search("assignee_id", USER_ID)).thenReturn(assignedTickets);
 
-        String expected = renderedAssignedTicker1 + TestConstants.LINE_SEPARATOR + renderedAssignedTicker2;
+        String expected = renderedAssignedTicker1 + TestConstants.EMPTY_LINE + renderedAssignedTicker2;
         assertThat(userRenderer.render(user), containsString(expected));
     }
 

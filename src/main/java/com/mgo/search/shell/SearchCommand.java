@@ -44,7 +44,7 @@ public class SearchCommand {
                 return "No results found for criteria.";
             }
 
-            return results.stream().map(rendererResolver::render).collect(Collectors.joining(DOUBLE_NEW_LINE));
+            return results.stream().map(dto -> rendererResolver.render(dto)).collect(Collectors.joining(DOUBLE_NEW_LINE));
         } catch (IllegalAccessException e) {
             return e.getMessage();
         }

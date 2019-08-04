@@ -9,6 +9,9 @@ public class OrganizationMarshaller implements PresentationMarshaller<Organizati
 
     @Override
     public Organization marshall(OrganizationEntity entity) {
+
+        if (entity == null) return null;
+
         Organization org = new Organization();
         org.setId(entity.getId());
         org.setUrl(entity.getUrl());

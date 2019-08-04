@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.stream.Collectors;
 
 public class PresentationDtoSummaryRenderer implements Renderer {
+    private static final String EMPTY_SUMMARY = "Data not found or not assigned";
     private FieldValueRenderer fieldValueRenderer;
 
     public PresentationDtoSummaryRenderer(FieldValueRenderer fieldValueRenderer) {
@@ -13,6 +14,8 @@ public class PresentationDtoSummaryRenderer implements Renderer {
     }
 
     public String render(PresentationDto dto) {
+        if (dto == null) return EMPTY_SUMMARY;
+
         return dto.getClass().getSimpleName() +
                 HORIZONTAL_BAR +
                 Arrays.stream(dto.getClass().getDeclaredFields())

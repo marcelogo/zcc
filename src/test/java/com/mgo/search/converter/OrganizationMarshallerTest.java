@@ -10,6 +10,7 @@ import org.mockito.internal.util.collections.Sets;
 import java.util.Set;
 import java.util.UUID;
 
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasItems;
 import static org.hamcrest.Matchers.is;
@@ -105,5 +106,10 @@ class OrganizationMarshallerTest {
         Set<String> marshalled = marshaller.marshall(entity).getTags();
         assertThat(marshalled, hasSize(2));
         assertThat(marshalled, hasItems(tag1, tag2));
+    }
+
+    @Test
+    void shouldReturnNullWhenEntityIsNull(){
+        assertThat(marshaller.marshall(null), is(nullValue()));
     }
 }

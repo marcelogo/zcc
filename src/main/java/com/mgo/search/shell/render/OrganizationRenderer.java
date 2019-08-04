@@ -23,30 +23,31 @@ public class OrganizationRenderer implements PresentationDtoRenderer<Organizatio
     }
 
     public String render(Organization organization) {
-        return "Organization Details" +
-                HORIZONTAL_BAR +
+        return LINE_SEPARATOR +
+                "Organization Details" +
+                HORIZONTAL_BAR + LINE_SEPARATOR +
                 renderOrganization(organization) +
-                LINE_SEPARATOR +
+                EMPTY_LINE +
                 String.format("User from %s organization", organization.getName()) +
-                HORIZONTAL_BAR +
+                HORIZONTAL_BAR + LINE_SEPARATOR +
                 renderUsersFromOrganization(organization.getId()) +
-                LINE_SEPARATOR +
+                EMPTY_LINE +
                 String.format("Tickets from %s organization", organization.getName()) +
-                HORIZONTAL_BAR +
+                HORIZONTAL_BAR + LINE_SEPARATOR +
                 renderTicketsFromOrganization(organization.getId());
     }
 
     private String renderTicketsFromOrganization(String orgId) {
         return ticketSearchService.search(ORGANIZATION_ID_FIELD, orgId).stream()
-                .map(user -> presentationDtoSummaryRenderer.render(user))
-                .collect(Collectors.joining(System.lineSeparator()));
+                .map(ticket -> presentationDtoSummaryRenderer.render(ticket))
+                .collect(Collectors.joining(EMPTY_LINE));
 
     }
 
     private String renderUsersFromOrganization(String orgId) {
         return userSearchService.search(ORGANIZATION_ID_FIELD, orgId).stream()
                 .map(user -> presentationDtoSummaryRenderer.render(user))
-                .collect(Collectors.joining(System.lineSeparator()));
+                .collect(Collectors.joining(EMPTY_LINE));
     }
 
     private String renderOrganization(Organization organization) {

@@ -36,7 +36,8 @@ class SearchableFieldRendererTest {
     void shouldCreateStringWithEntityNameFollowedByFieldNamesSeparatedByNewLine(EntityType entityType) {
         String actual = renderer.renderForType(entityType);
 
-        String expected = entityType.name() +
+        String expected = TestConstants.LINE_SEPARATOR +
+                entityType.name() +
                 TestConstants.HORIZONTAL_BAR +
                 "    field1" +
                 TestConstants.LINE_SEPARATOR +

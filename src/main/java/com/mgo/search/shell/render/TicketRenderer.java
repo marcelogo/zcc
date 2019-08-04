@@ -11,20 +11,21 @@ public class TicketRenderer implements PresentationDtoRenderer<Ticket> {
     }
 
     public String render(Ticket ticket) {
-        return "Ticket Details" +
+        return LINE_SEPARATOR +
+                "Ticket Details" +
                 HORIZONTAL_BAR +
                 presentationDtoSummaryRenderer.render(ticket) +
-                LINE_SEPARATOR +
+                EMPTY_LINE +
                 "Ticket's organization details" +
-                HORIZONTAL_BAR +
+                HORIZONTAL_BAR + LINE_SEPARATOR +
                 presentationDtoSummaryRenderer.render(ticket.getOrganization()) +
-                LINE_SEPARATOR +
+                EMPTY_LINE +
                 "Submitter" +
-                HORIZONTAL_BAR +
+                HORIZONTAL_BAR + LINE_SEPARATOR +
                 presentationDtoSummaryRenderer.render(ticket.getSubmitter()) +
-                LINE_SEPARATOR +
+                EMPTY_LINE +
                 "Assignee" +
-                HORIZONTAL_BAR +
+                HORIZONTAL_BAR + LINE_SEPARATOR +
                 presentationDtoSummaryRenderer.render(ticket.getAssignee());
     }
 

@@ -63,7 +63,7 @@ class OrganizationRendererTest {
         Collection<User> organizationUsers = Arrays.asList(user1, user2);
         when(userSearchService.search("organization_id", ORG_ID)).thenReturn(organizationUsers);
 
-        String expected = renderedUser1 + TestConstants.LINE_SEPARATOR + renderedUser2;
+        String expected = renderedUser1 + TestConstants.EMPTY_LINE + renderedUser2;
         assertThat(organizationRenderer.render(organization), containsString(expected));
     }
 
@@ -81,7 +81,7 @@ class OrganizationRendererTest {
         Collection<Ticket> organizationTickets = Arrays.asList(ticket1, ticket2);
         when(ticketSearchService.search("organization_id", ORG_ID)).thenReturn(organizationTickets);
 
-        String expected = renderedTicker1 + TestConstants.LINE_SEPARATOR + renderedTicker2;
+        String expected = renderedTicker1 + TestConstants.EMPTY_LINE + renderedTicker2;
         assertThat(organizationRenderer.render(organization), containsString(expected));
     }
 }
