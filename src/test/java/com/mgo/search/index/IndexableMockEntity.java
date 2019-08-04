@@ -24,7 +24,6 @@ class IndexableMockEntity implements Entity {
         setId(entityId);
     }
 
-
     @Override
     public String getId() {
         return id;

@@ -86,4 +86,26 @@ class InMemoryMapIndexServiceTest {
         assertThat(fieldNames, org.hamcrest.Matchers.contains("id", "stringField", "longField", "intField", "booleanField", "collectionField", "nullableField", "_serialized_name"));
     }
 
+    @Test
+    void shouldIndexNullValuesAsEmptyValue() throws NoSuchFieldException {
+        Field stringField = entity.getClass().getDeclaredField("stringField");
+        when(fieldValueExtractor.valueAsString(eq(entity), eq(stringField))).thenReturn(null);
+
+        Collection<String> ids = indexService.search("stringField", "   ");
+
+        assertThat(ids, hasSize(1));
+        assertThat(ids, org.hamcrest.Matchers.contains(ENTITY_ID));
+    }
+
+    @Test
+    void shouldIndexEmptyStringsAsEmptyValue() throws NoSuchFieldException {
+        Field stringField = entity.getClass().getDeclaredField("stringField");
+        when(fieldValueExtractor.valueAsString(eq(entity), eq(stringField))).thenReturn("              ");
+
+        Collection<String> ids = indexService.search("stringField", "   ");
+
+        assertThat(ids, hasSize(1));
+        assertThat(ids, org.hamcrest.Matchers.contains(ENTITY_ID));
+    }
+
 }

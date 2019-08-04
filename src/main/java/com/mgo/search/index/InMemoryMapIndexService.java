@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 public class InMemoryMapIndexService<T extends Entity> implements IndexService<T> {
 
     private static final String STRING_SEPARATOR = " ";
+    private static final String EMPTY_VALUE_PLACEHOLDER = "____EMPTY__VALUE____";
     private Map<String, Map<String, Set<String>>> index;
     private Repository<T> entityRepository;
     private FieldValueExtractor fieldValueExtractor;
@@ -40,8 +41,13 @@ public class InMemoryMapIndexService<T extends Entity> implements IndexService<T
     @Override
     public Collection<String> search(String field, String pattern) {
         indexIfNeeded();
+
         Map<String, Set<String>> valueSetMap = index.getOrDefault(field, Collections.emptyMap());
-        return new ArrayList<>(valueSetMap.getOrDefault(pattern, Collections.emptySet()));
+        return new ArrayList<>(valueSetMap.getOrDefault(patternOrEmpty(pattern), Collections.emptySet()));
+    }
+
+    private String patternOrEmpty(String pattern) {
+        return pattern.trim().isEmpty() ? EMPTY_VALUE_PLACEHOLDER : pattern;
     }
 
     private Consumer<T> indexFields() {
@@ -53,8 +59,16 @@ public class InMemoryMapIndexService<T extends Entity> implements IndexService<T
     }
 
     private void tokenizeAndIndexFieldValues(String entityId, Field field, Object fieldValue) {
-        Arrays.stream(fieldValue.toString().split(STRING_SEPARATOR))
-                .forEach(t -> indexFieldValueByToken(entityId, field, t));
+        if (nullOrEmpty(fieldValue)) {
+            indexFieldValueByToken(entityId, field, EMPTY_VALUE_PLACEHOLDER);
+        } else {
+            Arrays.stream(fieldValue.toString().split(STRING_SEPARATOR))
+                    .forEach(t -> indexFieldValueByToken(entityId, field, t));
+        }
+    }
+
+    private boolean nullOrEmpty(Object fieldValue) {
+        return fieldValue == null || fieldValue.toString().trim().isEmpty();
     }
 
     private void indexFieldValueByToken(String entityId, Field field, String token) {
