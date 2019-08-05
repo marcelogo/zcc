@@ -11,8 +11,8 @@ import java.util.Map;
 public class OrganizationJsonRepository implements Repository<OrganizationEntity> {
     private Map<String, OrganizationEntity> organizationEntityMap;
 
-    public OrganizationJsonRepository(InputStream dataFile, JsonReader jsonReader) throws IOException {
-        organizationEntityMap = jsonReader.read(dataFile, OrganizationEntity.class);
+    public OrganizationJsonRepository(InputStream data, JsonReader jsonReader) throws IOException {
+        organizationEntityMap = jsonReader.read(data, OrganizationEntity.class);
     }
 
     @Override

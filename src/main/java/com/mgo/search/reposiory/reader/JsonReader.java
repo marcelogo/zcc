@@ -11,8 +11,8 @@ import java.util.Map;
 
 public class JsonReader {
 
-    public <T extends Entity> Map<String, T> read(InputStream dataFile, Class<T> clazz) {
-        InputStreamReader fr = new InputStreamReader(dataFile);
+    public <T extends Entity> Map<String, T> read(InputStream data, Class<T> clazz) {
+        InputStreamReader fr = new InputStreamReader(data);
         return toEntityIndex(new Gson().fromJson(fr, TypeToken.getParameterized(List.class, clazz).getType()));
     }
 

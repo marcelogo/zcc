@@ -55,17 +55,17 @@ public class InMemoryMapIndexService<T extends Entity> implements IndexService<T
         }
     }
 
-    private void indexFieldValue(String entityId, Field field, Object fieldValue) {
+    private void indexFieldValue(String entityId, Field field, String fieldValue) {
         if (nullOrEmpty(fieldValue)) {
             indexFieldValueByWord(entityId, field, EMPTY_VALUE_PLACEHOLDER);
         } else {
-            Arrays.stream(fieldValue.toString().split(STRING_SEPARATOR))
+            Arrays.stream(fieldValue.split(STRING_SEPARATOR))
                     .forEach(word -> indexFieldValueByWord(entityId, field, word));
         }
     }
 
-    private boolean nullOrEmpty(Object fieldValue) {
-        return fieldValue == null || fieldValue.toString().trim().isEmpty();
+    private boolean nullOrEmpty(String fieldValue) {
+        return fieldValue == null || fieldValue.trim().isEmpty();
     }
 
     private void indexFieldValueByWord(String entityId, Field field, String word) {

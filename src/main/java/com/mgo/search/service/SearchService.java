@@ -6,6 +6,6 @@ import java.util.Collection;
 
 public interface SearchService<P extends PresentationDto> {
 
-    Collection<P> search(String field, String pattern);
+    Collection<P> search(String field, String word);
 
 }

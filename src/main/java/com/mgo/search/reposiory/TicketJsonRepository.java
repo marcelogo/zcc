@@ -11,8 +11,8 @@ import java.util.Map;
 public class TicketJsonRepository implements Repository<TicketEntity> {
     private Map<String, TicketEntity> ticketMap;
 
-    public TicketJsonRepository(InputStream dataFile, JsonReader jsonReader) throws IOException {
-        ticketMap = jsonReader.read(dataFile, TicketEntity.class);
+    public TicketJsonRepository(InputStream data, JsonReader jsonReader) throws IOException {
+        ticketMap = jsonReader.read(data, TicketEntity.class);
     }
 
     @Override

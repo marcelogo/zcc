@@ -11,8 +11,8 @@ import java.util.Map;
 public class UserJsonRepository implements Repository<UserEntity> {
     private Map<String, UserEntity> userMap;
 
-    public UserJsonRepository(InputStream dataFile, JsonReader jsonReader) throws IOException {
-        userMap = jsonReader.read(dataFile, UserEntity.class);
+    public UserJsonRepository(InputStream data, JsonReader jsonReader) throws IOException {
+        userMap = jsonReader.read(data, UserEntity.class);
     }
 
     @Override

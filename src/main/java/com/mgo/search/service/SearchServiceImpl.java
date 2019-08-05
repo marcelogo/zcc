@@ -22,8 +22,8 @@ public class SearchServiceImpl<E extends Entity, P extends PresentationDto> impl
     }
 
     @Override
-    public Collection<P> search(String field, String pattern) {
-        return indexService.search(field, pattern).stream()
+    public Collection<P> search(String field, String word) {
+        return indexService.search(field, word).stream()
                 .map(repository::byId)
                 .map(marshaller::marshall)
                 .collect(Collectors.toList());
