@@ -5,7 +5,7 @@ import com.mgo.search.model.PresentationDto;
 import com.mgo.search.model.Ticket;
 import com.mgo.search.model.User;
 import com.mgo.search.service.EntityType;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+import org.apache.commons.lang3.NotImplementedException;
 
 import java.util.Map;
 
@@ -41,6 +41,6 @@ public class PresentationDtoRendererResolver implements PresentationDtoRenderer<
             return render((Ticket) dto);
         }
 
-        throw new NotImplementedException();
+        throw new NotImplementedException(String.format("No render support for %s", dto.getClass().getName()));
     }
 }

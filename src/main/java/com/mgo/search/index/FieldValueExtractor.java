@@ -1,7 +1,7 @@
 package com.mgo.search.index;
 
 import com.mgo.search.reposiory.entity.Entity;
-import jdk.internal.joptsimple.internal.Strings;
+import org.apache.commons.lang3.StringUtils;
 
 import java.lang.reflect.Field;
 import java.util.Collection;
@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 
 public class FieldValueExtractor {
 
-    private static final String DEFAULT_VALUE = Strings.EMPTY;
+    private static final String DEFAULT_VALUE = StringUtils.EMPTY;
     private static final String STRING_SEPARATOR = " ";
 
     public String valueAsString(Entity entity, Field field){

@@ -1,6 +1,5 @@
 package com.mgo.search.index;
 
-import jdk.internal.joptsimple.internal.Strings;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -85,14 +84,14 @@ class FieldValueExtractorTest {
     void shouldReturnEmptyStringIfFieldValueIsNull() throws NoSuchFieldException {
         Field nullableField = entity.getClass().getDeclaredField("nullableField");
 
-        assertThat(extractor.valueAsString(entity, nullableField), is(Strings.EMPTY));
+        assertThat(extractor.valueAsString(entity, nullableField), is(StringUtils.EMPTY));
     }
 
     @Test
     void shouldReturnEmptyStringIfFieldValueCantBeAccessed() throws NoSuchFieldException {
         Field mockField = this.getClass().getDeclaredField("mockField");
 
-        assertThat(extractor.valueAsString(entity, mockField), is(Strings.EMPTY));
+        assertThat(extractor.valueAsString(entity, mockField), is(StringUtils.EMPTY));
     }
 
 }
