@@ -11,6 +11,7 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Profile;
 import org.springframework.shell.jline.InteractiveShellApplicationRunner;
 import org.springframework.shell.jline.ScriptShellApplicationRunner;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -33,7 +34,10 @@ import static org.mockito.Mockito.when;
         ScriptShellApplicationRunner.SPRING_SHELL_SCRIPT_ENABLED + "=false",
         InteractiveShellApplicationRunner.SPRING_SHELL_INTERACTIVE_ENABLED + "=false"
 })
+@Profile("performanceTest")
 class SearchAppPerformanceTest {
+
+    private static final int DATA_VOLUME = 100000;
 
     private Map<String, UserEntity> userSource;
 
@@ -45,7 +49,7 @@ class SearchAppPerformanceTest {
 
     @BeforeEach
     void populateUserSource() {
-        userSource = IntStream.range(0, 100000)
+        userSource = IntStream.range(0, DATA_VOLUME)
                 .mapToObj(this::createUserEntity)
                 .collect(Collectors.toMap(UserEntity::getId, Function.identity()));
 
@@ -79,7 +83,7 @@ class SearchAppPerformanceTest {
 
     @Test
     void shouldBeAbleToHandle100kUserEntities() {
-        IntStream.range(0, 100000).forEach(id -> {
+        IntStream.range(0, DATA_VOLUME).forEach(id -> {
             String searchId = "id" + id;
             Collection<User> results = userSearchService.search("_id", searchId);
             assertThat(results, hasSize(1));
