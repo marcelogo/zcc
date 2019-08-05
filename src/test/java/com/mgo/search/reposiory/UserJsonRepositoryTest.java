@@ -22,7 +22,7 @@ class UserJsonRepositoryTest {
 
     @BeforeEach
     void setUp() throws IOException {
-        userRepo = new UserJsonRepository(new ClassPathResource("userMockData.json").getFile(), new JsonReader());
+        userRepo = new UserJsonRepository(new ClassPathResource("userMockData.json").getInputStream(), new JsonReader());
     }
 
     @Test

@@ -22,7 +22,7 @@ class OrganizationJsonRepositoryTest {
 
     @BeforeEach
     void setUp() throws IOException {
-        orgRepo = new OrganizationJsonRepository(new ClassPathResource("orgMockData.json").getFile(), new JsonReader());
+        orgRepo = new OrganizationJsonRepository(new ClassPathResource("orgMockData.json").getInputStream(), new JsonReader());
     }
 
     @Test

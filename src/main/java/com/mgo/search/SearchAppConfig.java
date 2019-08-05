@@ -39,17 +39,17 @@ public class SearchAppConfig {
 
     @Bean
     public Repository<UserEntity> userEntityRepository(JsonReader jsonReader) throws IOException {
-        return new UserJsonRepository(new ClassPathResource("data/users.json").getFile(), jsonReader);
+        return new UserJsonRepository(new ClassPathResource("data/users.json").getInputStream(), jsonReader);
     }
 
     @Bean
     public Repository<OrganizationEntity> organizationEntityRepository(JsonReader jsonReader) throws IOException {
-        return new OrganizationJsonRepository(new ClassPathResource("data/organizations.json").getFile(), jsonReader);
+        return new OrganizationJsonRepository(new ClassPathResource("data/organizations.json").getInputStream(), jsonReader);
     }
 
     @Bean
     public Repository<TicketEntity> ticketEntityRepository(JsonReader jsonReader) throws IOException {
-        return new TicketJsonRepository(new ClassPathResource("data/tickets.json").getFile(), jsonReader);
+        return new TicketJsonRepository(new ClassPathResource("data/tickets.json").getInputStream(), jsonReader);
     }
 
     @Bean

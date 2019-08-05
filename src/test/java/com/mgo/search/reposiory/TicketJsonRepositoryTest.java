@@ -22,7 +22,7 @@ class TicketJsonRepositoryTest {
 
     @BeforeEach
     void setUp() throws IOException {
-        ticketRepo = new TicketJsonRepository(new ClassPathResource("ticketMockData.json").getFile(), new JsonReader());
+        ticketRepo = new TicketJsonRepository(new ClassPathResource("ticketMockData.json").getInputStream(), new JsonReader());
     }
 
     @Test

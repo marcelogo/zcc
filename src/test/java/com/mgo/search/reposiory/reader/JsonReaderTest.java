@@ -24,14 +24,14 @@ class JsonReaderTest {
 
     @Test
     void shouldReadAllEntitiesFromJson() throws IOException {
-        Map<String, MockEntity> read = new JsonReader().read(resourceData.getFile(), MockEntity.class);
+        Map<String, MockEntity> read = new JsonReader().read(resourceData.getInputStream(), MockEntity.class);
 
         assertThat(read, aMapWithSize(3));
     }
 
     @Test
     void shouldCreateIndexReadEntitiesById() throws IOException {
-        Map<String, MockEntity> read = new JsonReader().read(resourceData.getFile(), MockEntity.class);
+        Map<String, MockEntity> read = new JsonReader().read(resourceData.getInputStream(), MockEntity.class);
 
         assertThat(read.get(ENTITY1_ID), org.hamcrest.core.Is.is(new MockEntity(ENTITY1_ID, ENTITY1_NAME)));
         assertThat(read.get(ENTITY2_ID), org.hamcrest.core.Is.is(new MockEntity(ENTITY2_ID, ENTITY2_NAME)));
