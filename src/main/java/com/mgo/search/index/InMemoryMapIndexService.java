@@ -5,7 +5,6 @@ import com.mgo.search.reposiory.entity.Entity;
 
 import java.lang.reflect.Field;
 import java.util.*;
-import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 public class InMemoryMapIndexService<T extends Entity> implements IndexService<T> {
@@ -27,7 +26,7 @@ public class InMemoryMapIndexService<T extends Entity> implements IndexService<T
 
     private void indexIfNeeded() {
         if (indexed) return;
-        entityRepository.findAll().forEach(indexFields());
+        entityRepository.findAll().forEach(this::indexFields);
         indexed = true;
     }
 
@@ -39,31 +38,29 @@ public class InMemoryMapIndexService<T extends Entity> implements IndexService<T
     }
 
     @Override
-    public Collection<String> search(String field, String pattern) {
+    public Collection<String> search(String field, String word) {
         indexIfNeeded();
 
         Map<String, Set<String>> valueSetMap = index.getOrDefault(field, Collections.emptyMap());
-        return new ArrayList<>(valueSetMap.getOrDefault(patternOrEmpty(pattern), Collections.emptySet()));
+        return new ArrayList<>(valueSetMap.getOrDefault(wordOrEmpty(word), Collections.emptySet()));
     }
 
-    private String patternOrEmpty(String pattern) {
-        return pattern.trim().isEmpty() ? EMPTY_VALUE_PLACEHOLDER : pattern;
+    private String wordOrEmpty(String word) {
+        return word.trim().isEmpty() ? EMPTY_VALUE_PLACEHOLDER : word;
     }
 
-    private Consumer<T> indexFields() {
-        return entity -> {
-            for (Field field : entity.getClass().getDeclaredFields()) {
-                tokenizeAndIndexFieldValues(entity.getId(), field, fieldValueExtractor.valueAsString(entity, field));
-            }
-        };
+    private void indexFields(T entity) {
+        for (Field field : entity.getClass().getDeclaredFields()) {
+            indexFieldValue(entity.getId(), field, fieldValueExtractor.valueAsString(entity, field));
+        }
     }
 
-    private void tokenizeAndIndexFieldValues(String entityId, Field field, Object fieldValue) {
+    private void indexFieldValue(String entityId, Field field, Object fieldValue) {
         if (nullOrEmpty(fieldValue)) {
-            indexFieldValueByToken(entityId, field, EMPTY_VALUE_PLACEHOLDER);
+            indexFieldValueByWord(entityId, field, EMPTY_VALUE_PLACEHOLDER);
         } else {
             Arrays.stream(fieldValue.toString().split(STRING_SEPARATOR))
-                    .forEach(t -> indexFieldValueByToken(entityId, field, t));
+                    .forEach(word -> indexFieldValueByWord(entityId, field, word));
         }
     }
 
@@ -71,15 +68,15 @@ public class InMemoryMapIndexService<T extends Entity> implements IndexService<T
         return fieldValue == null || fieldValue.toString().trim().isEmpty();
     }
 
-    private void indexFieldValueByToken(String entityId, Field field, String token) {
+    private void indexFieldValueByWord(String entityId, Field field, String word) {
         String fieldName = fieldNameResolver.fieldNameFor(field);
 
         Map<String, Set<String>> fieldIndex = index.getOrDefault(fieldName, new HashMap<>());
         index.putIfAbsent(fieldName, fieldIndex);
 
-        Set<String> fieldTokenIndex = fieldIndex.getOrDefault(token, new HashSet<>());
-        fieldTokenIndex.add(entityId);
-        fieldIndex.putIfAbsent(token, fieldTokenIndex);
+        Set<String> wordIndex = fieldIndex.getOrDefault(word, new HashSet<>());
+        wordIndex.add(entityId);
+        fieldIndex.putIfAbsent(word, wordIndex);
     }
 
 }

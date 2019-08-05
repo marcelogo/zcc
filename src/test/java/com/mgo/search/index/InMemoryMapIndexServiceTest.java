@@ -53,14 +53,14 @@ class InMemoryMapIndexServiceTest {
     }
 
     @Test
-    void shouldReturnEntityIdWhenSearchPatternMatchesCompletelyAnyFieldToken() {
+    void shouldReturnEntityIdWhenSearchWordMatchesCompletelyAnyFieldWord() {
         Collection<String> ids = indexService.search("stringField", "word");
         assertThat(ids, hasSize(1));
         assertThat(ids, hasItem(ENTITY_ID));
     }
 
     @Test
-    void shouldReturnTwoEntityIdsWhenSearchPatternMatchesCompletelyAnyFieldTokenIn2Entities() {
+    void shouldReturnTwoEntityIdsWhenSearchWordMatchesCompletelyAnyFieldWordIn2Entities() {
         when(fieldValueExtractor.valueAsString(eq(entity2), any(Field.class))).thenReturn(COMMON_FIELD_VALUE_OF_TWO_ENTITIES);
         when(fieldValueExtractor.valueAsString(eq(entity3), any(Field.class))).thenReturn(COMMON_FIELD_VALUE_OF_TWO_ENTITIES);
 
