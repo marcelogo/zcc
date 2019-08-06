@@ -4,7 +4,6 @@ import com.mgo.search.model.Organization;
 import com.mgo.search.model.Ticket;
 import com.mgo.search.model.User;
 import com.mgo.search.service.EntityType;
-import org.apache.commons.lang3.NotImplementedException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -71,6 +70,6 @@ class PresentationDtoRendererResolverTest {
 
     @Test
     void shouldThrowExceptionWhenDtoDoesNotHaveRenderer() {
-        assertThrows(NotImplementedException.class, () -> resolver.render(new MockPresentationDto()));
+        assertThrows(DtoNotSupported.class, () -> resolver.render(new MockPresentationDto()));
     }
 }
