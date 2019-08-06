@@ -124,6 +124,10 @@ For specific command help
 ``` 
 shell:> help <command>
 ```
+## Stress test
+In order to ensure the evaluation criteria 4 (_Performance - should gracefully handle a significant increase in amount of data provided (e.g 10000+ users)_) is covered the test
+`SearchAppPerformanceTest` runs an integration test using  a data source with 100K users.
+Indexing and 100,000 search commands have run under 35 seconds.  
 
 ## Assumptions and Trade-offs
 
