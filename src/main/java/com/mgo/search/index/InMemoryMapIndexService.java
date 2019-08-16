@@ -41,8 +41,22 @@ public class InMemoryMapIndexService<T extends Entity> implements IndexService<T
     public Collection<String> search(String field, String word) {
         indexIfNeeded();
 
+        String[] wordFragments = wordOrEmpty(word).split(STRING_SEPARATOR);
+
+        return Arrays.stream(wordFragments)
+                .map(wordFragment -> searchSingleWord(field, wordFragment))
+                .flatMap(List::stream)
+                .collect(Collectors.groupingBy(String::toString, Collectors.counting()))
+                .entrySet()
+                .stream()
+                .filter(entry -> entry.getValue() == wordFragments.length)
+                .map(entry -> entry.getKey())
+                .collect(Collectors.toList());
+    }
+
+    private List<String> searchSingleWord(String field, String word) {
         Map<String, Set<String>> valueSetMap = index.getOrDefault(field, Collections.emptyMap());
-        return new ArrayList<>(valueSetMap.getOrDefault(wordOrEmpty(word), Collections.emptySet()));
+        return new ArrayList<>(valueSetMap.getOrDefault(toIndexCase(word), Collections.emptySet()));
     }
 
     private String wordOrEmpty(String word) {
@@ -74,9 +88,13 @@ public class InMemoryMapIndexService<T extends Entity> implements IndexService<T
         Map<String, Set<String>> fieldIndex = index.getOrDefault(fieldName, new HashMap<>());
         index.putIfAbsent(fieldName, fieldIndex);
 
-        Set<String> wordIndex = fieldIndex.getOrDefault(word, new HashSet<>());
+        Set<String> wordIndex = fieldIndex.getOrDefault(toIndexCase(word), new HashSet<>());
         wordIndex.add(entityId);
-        fieldIndex.putIfAbsent(word, wordIndex);
+        fieldIndex.putIfAbsent(toIndexCase(word), wordIndex);
+    }
+
+    private String toIndexCase(String word) {
+        return word.toUpperCase();
     }
 
 }

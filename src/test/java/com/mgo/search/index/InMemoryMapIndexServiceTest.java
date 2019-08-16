@@ -60,6 +60,20 @@ class InMemoryMapIndexServiceTest {
     }
 
     @Test
+    void shouldReturnEntityIdWhenSearchWordMatchesCompletelyAnyFieldWordInAnyCase() {
+        Collection<String> ids = indexService.search("stringField", "wOrD");
+        assertThat(ids, hasSize(1));
+        assertThat(ids, hasItem(ENTITY_ID));
+    }
+
+    @Test
+    void shouldReturnEntityIdWhenSearchWordsMatchesCompletelyAnyFieldWordInAnyCase() {
+        Collection<String> ids = indexService.search("stringField", "wOrD trUe");
+        assertThat(ids, hasSize(1));
+        assertThat(ids, hasItem(ENTITY_ID));
+    }
+
+    @Test
     void shouldReturnTwoEntityIdsWhenSearchWordMatchesCompletelyAnyFieldWordIn2Entities() {
         when(fieldValueExtractor.valueAsString(eq(entity2), any(Field.class))).thenReturn(COMMON_FIELD_VALUE_OF_TWO_ENTITIES);
         when(fieldValueExtractor.valueAsString(eq(entity3), any(Field.class))).thenReturn(COMMON_FIELD_VALUE_OF_TWO_ENTITIES);
