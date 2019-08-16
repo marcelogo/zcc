@@ -49,9 +49,13 @@ public class InMemoryMapIndexService<T extends Entity> implements IndexService<T
                 .collect(Collectors.groupingBy(String::toString, Collectors.counting()))
                 .entrySet()
                 .stream()
-                .filter(entry -> entry.getValue() == wordFragments.length)
-                .map(entry -> entry.getKey())
+                .filter(entry -> matchesAllSearchedWords(wordFragments, entry))
+                .map(Map.Entry::getKey)
                 .collect(Collectors.toList());
+    }
+
+    private boolean matchesAllSearchedWords(String[] wordFragments, Map.Entry<String, Long> entry) {
+        return entry.getValue() == wordFragments.length;
     }
 
     private List<String> searchSingleWord(String field, String word) {
